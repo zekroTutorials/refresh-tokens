@@ -7,10 +7,14 @@ import (
 	"github.com/alexedwards/argon2id"
 )
 
+// Argon2IDHasher implements Hasher using the
+// Argon2ID algorithm.
 type Argon2IDHasher struct {
 	params *argon2id.Params
 }
 
+// NewArgon2IDHasher initializes a new instance of
+// Argon2IDHasher with sime default configuration.
 func NewArgon2IDHasher() (a *Argon2IDHasher) {
 	a = new(Argon2IDHasher)
 

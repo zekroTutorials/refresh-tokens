@@ -11,6 +11,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+// MongoDriver implements Database for a
+// MongoDB connection.
 type MongoDriver struct {
 	client *mongo.Client
 
@@ -18,6 +20,11 @@ type MongoDriver struct {
 	refreshTokens *mongo.Collection
 }
 
+// NewMongoDriver initializes a new instance of
+// MongoDriver with the given connectionString and
+// database to use.
+//
+// If the database does not exist, it will be created.
 func NewMongoDriver(connectionString, database string) (m *MongoDriver, err error) {
 	m = new(MongoDriver)
 

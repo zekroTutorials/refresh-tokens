@@ -9,15 +9,29 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+// The lifetime of an access token.
 const tokenLifetime = 30 * time.Minute
 
+// The method used to sign JWT (access) tokens
 var jwtSigningMethod = jwt.SigningMethodRS256
 
+// JWTManager implements the Generator and
+// Validator interface of an access token
+// manager using JWT tokens in combination
+// with RSA public-private-keys as signing
+// method.
 type JWTManager struct {
 	privateKey *rsa.PrivateKey
 	publicKey  *rsa.PublicKey
 }
 
+// NewJWTManager creates an ew instance of JWTManager
+// with the given privateKeyFile and/or publicKeyFile.
+//
+// When you don't pass a privateKeyFile, you will not
+// be able to sign tokens with this manager and if you
+// don't pass a publicKeyFile, you will not be able
+// to verify tokens.
 func NewJWTManager(privateKeyFile, publicKeyFile string) (m *JWTManager, err error) {
 	m = new(JWTManager)
 
