@@ -74,5 +74,5 @@ services:
       - '80'
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.resources.entrypoints=http'
-      - 'traefik.http.routers.resources.rule=PathPrefix(`/`)'
+      - 'traefik.http.routers.webapp.entrypoints=http'
+      - 'traefik.http.routers.webapp.rule=PathPrefix(`/`)'
