@@ -25,8 +25,8 @@ export default class App extends Component {
     return (
       <div>
         <Router>
-          <Route path="/login" component={LoginRoute}></Route>
-          <Route path="/" component={MainRoute}></Route>
+          <Route exact path="/login" component={LoginRoute}></Route>
+          <Route exact path="/" component={MainRoute}></Route>
 
           {this.state.redirect && <Redirect to={this.state.redirect} />}
         </Router>
