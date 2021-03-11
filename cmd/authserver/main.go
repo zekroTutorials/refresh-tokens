@@ -15,7 +15,7 @@ import (
 
 type config struct {
 	MongoConnectionString string `envconfig:"MONGO_CONNECTIONSTRING"`
-	MongoDatabase         string `envconfig:"MONGO_DATABASE"`
+	MongoDatabase         string `envconfig:"MONGO_DATABASE" default:"tokenapp"`
 
 	FirstUserName     string `envconfig:"ROOT_USERNAME"`
 	FirstUserPassword string `envconfig:"ROOT_PASSWORD"`

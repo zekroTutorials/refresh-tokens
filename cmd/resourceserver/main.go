@@ -8,7 +8,7 @@ import (
 )
 
 type config struct {
-	PublicKeyFile string `envconfig:"PUBLICKEY" default:"./cert.pem"`
+	PublicKeyFile string `envconfig:"PUBLICKEYFILE" default:"./cert.pem"`
 
 	BindAddress string `envconfig:"WS_BINDADDRESS" default:":8080"`
 	Prefix      string `envconfig:"WS_PREFIX" default:""`

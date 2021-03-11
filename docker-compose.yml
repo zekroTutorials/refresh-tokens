@@ -1,0 +1,66 @@
+version: '3.1'
+
+volumes:
+  mongo:
+
+services:
+
+  traefik:
+    image: 'traefik'
+    command: 
+      - '--api.insecure=true' 
+      - '--providers.docker'
+      - '--entrypoints.http.address=:80'
+      - '--providers.docker.exposedByDefault=false'
+    ports:
+      - '80:80'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+  mongo:
+    image: 'mongo:4.4'
+    expose:
+      - '27017'
+    volumes:
+      - 'mongo:/data/db'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'root'
+      MONGO_INITDB_ROOT_PASSWORD: 'root'
+    
+  auth:
+    image: 'authserver'
+    build:
+      dockerfile: './images/authserver.Dockerfile'
+      context: '.'
+    expose:
+      - '80'
+    volumes:
+      - './cert/key.pem:/cert/key.pem:ro'
+    environment:
+      APP_MONGO_CONNECTIONSTRING: 'mongodb://root:root@mongo:27017/admin'
+      APP_MONGO_DATABASE: 'tokenapp'
+      APP_ROOT_USERNAME: 'root'
+      APP_ROOT_PASSWORD: 'root'
+      APP_PRIVATEKEYFILE: '/cert/key.pem'
+      APP_WS_PREFIX: '/api/auth'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.auth.entrypoint=http'
+      - 'traefik.http.routers.auth.rules=PathPrefix(`/api/auth`)'
+
+  resources:
+    image: 'resourceserver'
+    build:
+      dockerfile: './images/resourceserver.Dockerfile'
+      context: '.'
+    expose:
+      - '80'
+    volumes:
+      - './cert/cert.pem:/cert/cert.pem:ro'
+    environment:
+      APP_PUBLICKEYFILE: '/cert/cert.pem'
+      APP_WS_PREFIX: '/api/resources'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.auth.entrypoint=http'
+      - 'traefik.http.routers.auth.rules=PathPrefix(`/api/resources`)'
