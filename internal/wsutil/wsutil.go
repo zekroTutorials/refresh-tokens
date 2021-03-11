@@ -23,7 +23,7 @@ func AddCorsHeader(publicAddr string) func(*gin.Context) {
 		ctx.Header("Access-Control-Allow-Credentials", "true")
 
 		if strings.ToLower(ctx.Request.Method) == "options" {
-			ctx.Status(200)
+			ctx.Status(204)
 			ctx.Abort()
 		}
 	}

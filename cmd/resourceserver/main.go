@@ -40,10 +40,10 @@ func main() {
 
 	r := gin.Default()
 
-	r.Use(validateAccessToken)
 	if cfg.PublicAddr != "" {
 		r.Use(wsutil.AddCorsHeader(cfg.PublicAddr))
 	}
+	r.Use(validateAccessToken)
 
 	r.GET(cfg.Prefix+"/me", getMe)
 
