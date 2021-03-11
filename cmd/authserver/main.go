@@ -11,6 +11,7 @@ import (
 	"github.com/zekroTutorials/refresh-tokens/internal/database"
 	"github.com/zekroTutorials/refresh-tokens/internal/hashing"
 	"github.com/zekroTutorials/refresh-tokens/internal/models"
+	"github.com/zekroTutorials/refresh-tokens/internal/wsutil"
 )
 
 type config struct {
@@ -24,6 +25,7 @@ type config struct {
 
 	BindAddress string `envconfig:"WS_BINDADDRESS" default:":8080"`
 	Prefix      string `envconfig:"WS_PREFIX" default:""`
+	PublicAddr  string `envconfig:"WS_PUBLICADDR"`
 }
 
 var (
@@ -58,6 +60,10 @@ func main() {
 	mustInitFirstUser(cfg.FirstUserName, cfg.FirstUserPassword)
 
 	r := gin.Default()
+
+	if cfg.PublicAddr != "" {
+		r.Use(wsutil.AddCorsHeader(cfg.PublicAddr))
+	}
 
 	r.POST(cfg.Prefix+"/login", postLogin)
 	r.GET(cfg.Prefix+"/accesstoken", getAccesstoken)

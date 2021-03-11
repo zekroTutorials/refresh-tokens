@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zekroTutorials/refresh-tokens/internal/wsutil"
 )
 
 var errInvalidAccessToken = errors.New("invalid access token")
@@ -28,6 +29,6 @@ func validateAccessToken(ctx *gin.Context) {
 }
 
 func atAbort(ctx *gin.Context) {
-	jsonError(ctx, 401, errInvalidAccessToken)
+	wsutil.JsonError(ctx, 401, errInvalidAccessToken)
 	ctx.Abort()
 }

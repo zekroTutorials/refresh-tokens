@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/zekroTutorials/refresh-tokens/internal/accesstokens"
+	"github.com/zekroTutorials/refresh-tokens/internal/wsutil"
 )
 
 type config struct {
@@ -12,6 +13,7 @@ type config struct {
 
 	BindAddress string `envconfig:"WS_BINDADDRESS" default:":8080"`
 	Prefix      string `envconfig:"WS_PREFIX" default:""`
+	PublicAddr  string `envconfig:"WS_PUBLICADDR"`
 }
 
 var (
@@ -39,6 +41,9 @@ func main() {
 	r := gin.Default()
 
 	r.Use(validateAccessToken)
+	if cfg.PublicAddr != "" {
+		r.Use(wsutil.AddCorsHeader(cfg.PublicAddr))
+	}
 
 	r.GET(cfg.Prefix+"/me", getMe)
 
