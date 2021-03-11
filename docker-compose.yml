@@ -64,3 +64,15 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.resources.entrypoints=http'
       - 'traefik.http.routers.resources.rule=PathPrefix(`/api/resources`)'
+
+  webapp:
+    image: 'webapp'
+    build:
+      dockerfile: './images/webapp.Dockerfile'
+      context: '.'
+    expose:
+      - '80'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.resources.entrypoints=http'
+      - 'traefik.http.routers.resources.rule=PathPrefix(`/`)'
