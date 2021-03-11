@@ -45,8 +45,8 @@ services:
       APP_WS_PREFIX: '/api/auth'
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.auth.entrypoint=http'
-      - 'traefik.http.routers.auth.rules=PathPrefix(`/api/auth`)'
+      - 'traefik.http.routers.auth.entrypoints=http'
+      - 'traefik.http.routers.auth.rule=PathPrefix(`/api/auth`)'
 
   resources:
     image: 'resourceserver'
@@ -62,5 +62,5 @@ services:
       APP_WS_PREFIX: '/api/resources'
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.auth.entrypoint=http'
-      - 'traefik.http.routers.auth.rules=PathPrefix(`/api/resources`)'
+      - 'traefik.http.routers.resources.entrypoints=http'
+      - 'traefik.http.routers.resources.rule=PathPrefix(`/api/resources`)'
