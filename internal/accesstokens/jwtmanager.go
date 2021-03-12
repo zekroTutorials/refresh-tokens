@@ -9,9 +9,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-// The lifetime of an access token.
-const tokenLifetime = 30 * time.Minute
-
 // The method used to sign JWT (access) tokens
 var jwtSigningMethod = jwt.SigningMethodRS256
 
@@ -61,7 +58,7 @@ func NewJWTManager(privateKeyFile, publicKeyFile string) (m *JWTManager, err err
 	return
 }
 
-func (m *JWTManager) Generate(ident string) (token string, err error) {
+func (m *JWTManager) Generate(ident string, expire time.Duration) (token string, err error) {
 	if m.privateKey == nil {
 		err = errors.New("not supported with this instance")
 		return
@@ -70,7 +67,7 @@ func (m *JWTManager) Generate(ident string) (token string, err error) {
 	now := time.Now()
 	token, err = jwt.NewWithClaims(jwtSigningMethod, jwt.StandardClaims{
 		Subject:   ident,
-		ExpiresAt: now.Add(tokenLifetime).Unix(),
+		ExpiresAt: now.Add(expire).Unix(),
 		IssuedAt:  now.Unix(),
 	}).SignedString(m.privateKey)
 

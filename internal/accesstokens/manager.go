@@ -1,9 +1,12 @@
 package accesstokens
 
+import "time"
+
 // Generator provides functionalities to generate
-// access tokens linking to the given ident.
+// access tokens linking to the given ident with
+// the given expiration duration.
 type Generator interface {
-	Generate(ident string) (token string, err error)
+	Generate(ident string, expire time.Duration) (token string, err error)
 }
 
 // Validator provides functionalities to validate

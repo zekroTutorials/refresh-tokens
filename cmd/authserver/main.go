@@ -28,6 +28,9 @@ type config struct {
 	PublicAddr  string `envconfig:"WS_PUBLICADDR"`
 }
 
+// The lifetime of an access token.
+const accessTokenLifetime = 30 * time.Minute
+
 var (
 	userSnowflakeNode          *snowflake.Node
 	refreshTokensSnowflakeNode *snowflake.Node

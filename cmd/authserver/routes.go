@@ -17,7 +17,8 @@ type loginRequestModel struct {
 }
 
 type accessTokenModel struct {
-	Token string `json:"token"`
+	Token    string    `json:"token"`
+	Deadline time.Time `json:"deadline"`
 }
 
 const (
@@ -100,11 +101,11 @@ func getAccesstoken(ctx *gin.Context) {
 		return
 	}
 
-	accessToken, err := atgenerator.Generate(rtModel.UserID)
+	accessToken, err := atgenerator.Generate(rtModel.UserID, accessTokenLifetime)
 	if err != nil {
 		wsutil.JsonError(ctx, 500, err)
 		return
 	}
 
-	ctx.JSON(200, &accessTokenModel{accessToken})
+	ctx.JSON(200, &accessTokenModel{accessToken, time.Now().Add(accessTokenLifetime)})
 }
