@@ -1,5 +1,6 @@
 export interface AccessToken {
   token: string;
+  deadline: string;
 }
 
 export interface ErrorModel {

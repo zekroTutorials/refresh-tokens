@@ -7,7 +7,7 @@ const PREFIX =
 export default class RestAPI {
   public static readonly events = new EventEmitter();
 
-  private static accessToken: string;
+  private static accessToken: AccessToken;
 
   public static login(username: string, password: string): Promise<any> {
     return this.post("auth/login", { username, password }, false);
@@ -50,6 +50,17 @@ export default class RestAPI {
     contentType: string | undefined = "application/json",
     emitError: boolean = true
   ): Promise<T> {
+    if (this.accessToken && new Date(this.accessToken.deadline) < new Date()) {
+      console.log("Access token expired");
+      try {
+        this.accessToken = await this.getAccessToken();
+        return this.req(method, path, body, contentType, emitError);
+      } catch (e) {
+        if (emitError) this.events.emit("error", e);
+        throw e;
+      }
+    }
+
     let reqBody = undefined;
     if (body) {
       if (typeof body !== "string" && contentType === "application/json") {
@@ -65,7 +76,7 @@ export default class RestAPI {
     }
 
     if (this.accessToken) {
-      headers["authorization"] = "accessToken " + this.accessToken;
+      headers["authorization"] = "accessToken " + this.accessToken.token;
     }
 
     const res = await window.fetch(`${PREFIX}/${path}`, {
@@ -79,12 +90,10 @@ export default class RestAPI {
       try {
         const resBody = (await res.json()) as ErrorModel;
         if (resBody.error === "invalid access token") {
-          const accessToken = await this.getAccessToken();
-          this.accessToken = accessToken.token;
+          this.accessToken = await this.getAccessToken();
           return this.req(method, path, body, contentType, emitError);
         }
       } catch {}
-
       if (emitError) this.events.emit("authentication-error", res);
       throw new Error("auth error");
     }

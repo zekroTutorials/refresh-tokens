@@ -13,7 +13,7 @@ export default class App extends Component {
 
   async componentDidMount() {
     RestAPI.events.on("authentication-error", () => {
-      // this.redirect("/login");
+      this.redirect("/login");
     });
 
     try {
