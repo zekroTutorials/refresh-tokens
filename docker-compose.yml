@@ -34,6 +34,8 @@ services:
       context: '.'
     expose:
       - '80'
+    depends_on:
+      - 'mongo'
     volumes:
       - './cert/key.pem:/cert/key.pem:ro'
     environment:
@@ -55,6 +57,8 @@ services:
       context: '.'
     expose:
       - '80'
+    depends_on:
+      - 'mongo'
     volumes:
       - './cert/cert.pem:/cert/cert.pem:ro'
     environment:
