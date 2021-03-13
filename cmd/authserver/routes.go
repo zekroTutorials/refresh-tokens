@@ -75,7 +75,7 @@ func postLogin(ctx *gin.Context) {
 		return
 	}
 
-	ctx.SetCookie(sessionCookieName, tokenStr, int(sessionExpiration), "", "", false, true)
+	ctx.SetCookie(sessionCookieName, tokenStr, int(sessionExpiration.Seconds()), "", "", false, true)
 
 	ctx.JSON(200, user.Sanitize())
 }
